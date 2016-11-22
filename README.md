@@ -1,31 +1,29 @@
-yellowstone 1.0.0
+rtspclient 0.5.0
 ===
 
-```
-npm install yellowstone --save
-```
+**I originally took this repository from mbullington's yellow stone so credit should 
+go to him for the initial work, i simply needed a working version for Axis mjpeg streams**
 
-Yellowstone is a high-level library for receiving data from RTSP/RTP. It
-currently only supports RTSP/RTP over TCP. Yellowstone makes no attempt to parse
-or convert any of the raw data it receives, and puts that weight on the
-library user itself for the time being.
+RtspClient is a high-level library for receiving data from RTSP/RTP. It
+currently only supports RTSP/RTP over TCP MJPEG. 
+It's probably easy enough to implement other RFC specs but I have no need for myself.
 
-Yellowstone is written in ES6, so you'll need to use `gulp build` if you plan
-on using it with ES5, or you can use Yellowstone precompiled from npm.
+RtspClient is written with ES6 and works fine with node 7.1.0 but should work with 6.9.1
 
-Yellowstone does currently support:
+RtspClient does currently support:
 
 - Raw RTP/AVP over TCP
 - Basic and Digest Authentication
 - Pause, Play, and Teardown (Close)
-- Wrapper for ONVIF extensions to RTSP
 
-In the future, Yellowstone plans to support:
+In the future, RtspClient plans to support:
 
 - RTCP
 - Record and Announce Methods
 - Full Client RTSP support
 - Basic scriptable RTSP server (which also allows for unit tests)
+
+
 
 Examples
 ===
@@ -33,37 +31,29 @@ Examples
 An example of most of the API can be found at examples/wowza.js.
 
 ```js
-var RtspClient = require('yellowstone').RtspClient;
+var RtspClient = require('rtspclient').RtspClient;
 
 var client = new RtspClient();
 
 // details is a plain Object that includes...
 // format - string
-client.connect('rtsp://wowzaec2demo.streamlock.net/vod/mp4:BigBuckBunny_115k.mov').then(function(details) {
+client.connect('rtsp://someserver/mjpeg').then(function(details) {
   client.play();
-}).catch(function(err) {
+}).catch(err => {
   console.log(err.stack);
 });
 
-// data == packet.payload, just a small convenient thing
-client.on('data', function(data, packet) {
-  console.log(data.length);
+//frame is a buffer
+client.on('frame', frame => {
+  console.log(frame);
 });
 
 // allows you to optionally allow for RTSP logging
 // also allows for you to hook this into your own logging system easily
-client.on('log', function(data, prefix) {
-  console.log(prefix + ': ' + data);
+client.on('log', (data, direction) => {
+  console.log(`${direction}:${data}`);
 });
 ```
-
-Contributing
-===
-
-Please contribute features! This is a very small subset of what's possible
-with RTSP/RTP! Feel free to write and submit pull requests for easy to use
-abstractions of protocol extensions (such as lib/onvif.js), as well as core
-features and bug fixes.
 
 License
 ===
