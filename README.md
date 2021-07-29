@@ -6,9 +6,7 @@ yellowstone implementation to incorporate rtspclient's support for MJPEG-encoded
 streams with the option of parsing out individual JPG frames from the raw data while 
 restoring UDP support, keep alives, and authentication from yellowstone **
 
-RtspClient is a high-level library for receiving data from RTSP/RTP. It
-currently only supports RTSP/RTP over TCP MJPEG. 
-It's probably easy enough to implement other RFC specs but I have no need for myself.
+RtspClient is a high-level library for receiving data from RTSP/RTP with support for MJPEG and JPEG frame decoding.
 
 RtspClient is written with ES6 and works fine with node 7.1.0 but should work with 6.9.1
 
